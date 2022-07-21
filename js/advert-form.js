@@ -1,7 +1,8 @@
 import {toggleElements} from './util.js';
 import {showSuccessMessage, showErrorMessage} from './popup.js';
 import {sendData} from './api.js';
-import {uploadFile} from './photos.js';
+import {resetPreviewFile} from './photos.js';
+import { resetMap } from './map.js';
 
 const MIN_PRICE = {
   bungalow: '0',
@@ -32,6 +33,8 @@ const timeElement = document.querySelector('.ad-form__element--time');
 const timeList = timeElement.querySelectorAll('select');
 const sliderElement = document.querySelector('.ad-form__slider');
 const submitElement = document.querySelector('.ad-form__submit');
+const resetButton = document.querySelector('.ad-form__reset');
+
 
 const deactivatePage = () => {
   filterElement.classList.add('map__filters--disabled');
@@ -80,6 +83,9 @@ const setSubmitButtonState = (value) => {
 const onSendSuccess = () => {
   showSuccessMessage();
   formElement.reset();
+  filterElement.reset();
+  resetPreviewFile();
+  resetMap();
   setSubmitButtonState(false);
 };
 
@@ -102,6 +108,11 @@ const initValidation = () => {
   timeElement.addEventListener('change', onTimeChange);
   typeHousing.addEventListener('change', onTypeHousingChange);
 
+  resetButton.addEventListener('click', () => {
+    filterElement.reset();
+    resetMap();
+  });
+
   formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -111,8 +122,6 @@ const initValidation = () => {
       sendData(onSendSuccess, onSendFailure, new FormData(evt.target));
     }
   });
-
-  uploadFile();
 };
 
 const createSlider = () => {
@@ -139,4 +148,10 @@ const createSlider = () => {
   });
 };
 
-export {deactivatePage, activateFilters, activateForm, initValidation, createSlider};
+export {
+  deactivatePage,
+  activateFilters,
+  activateForm,
+  initValidation,
+  createSlider
+};

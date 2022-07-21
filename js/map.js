@@ -2,7 +2,6 @@ import {createRentOfferCard} from './advert-card.js';
 import {activateForm, activateFilters} from './advert-form.js';
 import {getData} from './api.js';
 import {setFilterListener} from './filters.js';
-import {uploadFile} from './photos.js';
 
 const MAX_OFFERS = 10;
 const LAT = 35.70292;
@@ -54,8 +53,6 @@ const mainPinMarker = L.marker(
 
 const map = L.map('map-canvas');
 const addressField = document.querySelector('#address');
-const resetButton = document.querySelector('.ad-form__reset');
-
 const markerGroup = L.layerGroup().addTo(map);
 
 const onPinMove = (evt) => {
@@ -63,7 +60,7 @@ const onPinMove = (evt) => {
   addressField.value = `${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`;
 };
 
-const renderMarkers = (offers) => {  //добавление маркеров на карту
+const renderMarkers = (offers) => {
   offers.forEach((offer) => {
     const {location} = offer;
     const adMarker = L.marker(
@@ -97,21 +94,11 @@ const resetMap = () => {
     lat: LAT,
     lng: LNG,
   }, SCALE);
-  addressField.value = DEFAULT_ADDRES;
-};
 
-resetButton.addEventListener('click', () => {
-  mainPinMarker.setLatLng({
-    lat: LAT,
-    lng: LNG,
-  });
-  map.setView({
-    lat: LAT,
-    lng: LNG,
-  }, SCALE);
-  addressField.value = DEFAULT_ADDRES;
-  uploadFile();
-});
+  setTimeout(() => {
+    addressField.value = DEFAULT_ADDRES;
+  }, 0);
+};
 
 const onLoadSuccess = (offers) => {
   renderMarkers(offers.slice(0, MAX_OFFERS));
@@ -119,7 +106,7 @@ const onLoadSuccess = (offers) => {
   setFilterListener(offers);
 };
 
-const initMap = () => { //инициализация карты, создание и добавление маркеров
+const initMap = () => {
   map.on('load', () => {
     activateForm(true);
     getData(onLoadSuccess);
@@ -130,9 +117,14 @@ const initMap = () => { //инициализация карты, создани�
     }, SCALE);
 
   L.tileLayer(LAYER, ATTRIBUTION).addTo(map);
-
-  mainPinMarker.addTo(map); //добавление маркера
+  addressField.value = DEFAULT_ADDRES;
+  mainPinMarker.addTo(map);
   mainPinMarker.on('move', onPinMove);
 };
 
-export {initMap, clearMarkers, renderMarkers, resetMap};
+export {
+  initMap,
+  clearMarkers,
+  renderMarkers,
+  resetMap
+};

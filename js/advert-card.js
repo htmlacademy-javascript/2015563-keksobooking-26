@@ -55,4 +55,7 @@ const createRentOfferCard = (advert) => {
   return cardElement;
 };
 
-export {createRentOfferCard, typeDictionary};
+export {
+  createRentOfferCard,
+  typeDictionary
+};

@@ -1,5 +1,5 @@
 import {debounce} from './util.js';
-import {clearMarkers, renderMarkers, resetMap} from './map.js';
+import {clearMarkers, renderMarkers} from './map.js';
 
 const DEFAULT_VALUE = 'any';
 const OFFERS_COUNT = 10;
@@ -69,13 +69,13 @@ const filterOffers = (offers) => {
 
 const onFilterChange = (data) => {
   clearMarkers();
-  resetMap();
   const filteredMarkers = filterOffers(data);
   renderMarkers(filteredMarkers);
 };
 
 const setFilterListener = (data) => {
   formFilterElement.addEventListener('change', debounce(() => onFilterChange(data)));
+  formFilterElement.addEventListener('reset', debounce(() => onFilterChange(data)));
 };
 
 export {setFilterListener};

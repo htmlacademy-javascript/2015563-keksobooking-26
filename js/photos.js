@@ -45,9 +45,9 @@ photoChooserElement.addEventListener('change', () => {
   }
 });
 
-const uploadFile = () => {
+const resetPreviewFile = () => {
   photoPreviewElement.innerHTML = '';
   avatarPreviewElement.src = DEFAULT_AVATAR;
 };
 
-export {uploadFile};
+export {resetPreviewFile};
